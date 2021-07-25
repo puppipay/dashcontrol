@@ -1,0 +1,35 @@
+
+{
+        "creator": {
+        "partneraddress":"mfhfG8BiHjMzmJoyeXavTUmSUxRAdpQ7Ce",
+        "partnerid": "",
+        "schemeid": "",
+        "fees": "500",
+        "partnershare": ""
+        },
+        "validator": {
+        "partneraddress":"mfhfG8BiHjMzmJoyeXavTUmSUxRAdpQ7Ce",
+        "partnerid": "",
+        "schemeid": "",
+        "fees": "500",
+        "partnershare": ""
+        },
+        "sender": {
+        "partneraddress":"mfhfG8BiHjMzmJoyeXavTUmSUxRAdpQ7Ce",
+        "partnerid": "",
+        "schemeid": "",
+        "fees": "500",
+        "partnershare": ""
+        },
+        "receiver": {
+        "partneraddress":"mfhfG8BiHjMzmJoyeXavTUmSUxRAdpQ7Ce",
+        "partnerid": "",
+        "schemeid": "",
+        "fees": "500",
+        "partnershare": ""
+        }
+        
+        
+        
+
+   }

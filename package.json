@@ -1,0 +1,19 @@
+{
+  "name": "dashcontrol",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "buffer-reverse": "^1.0.1",
+    "dashsatoshi": "^1.0.1",
+    "lodash": "^4.17.11",
+    "promise": "^8.0.3",
+    "request": "^2.88.0",
+    "typeforce": "^1.18.0"
+  }
+}
