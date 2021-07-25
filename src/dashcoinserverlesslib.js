@@ -7,12 +7,10 @@ request = require('request');
 promise = require('promise');
 var assert = require('assert');
 
-
-
 // https://github.com/dashevo/dashcore-lib
 
-
 //types = require('./node_modules/bitcoinjs-lib/src/types');
+
 typeforce = require('typeforce');
 var bufferReverse = require('buffer-reverse')
 
@@ -28,7 +26,7 @@ var globalspendabletxs = [];
 
 function dashcoinInit(contractinfo,  network, url, driverplans, plans, level) 
 {
-  var valid = true;
+   var valid = true;
    logger.init(level);
 
    globalcontractinfo = contractinfo;
@@ -49,7 +47,6 @@ function dashcoinInit(contractinfo,  network, url, driverplans, plans, level)
 
 function determineDashSendingShareAmount(type, amount, balance, targetaddr, returnaddr, selectedplan)
 {
-
   var fees = Number(globaldriverplans.dashcoinfees);
   var amount = Number(amount);
   var commission;
@@ -61,8 +58,6 @@ function determineDashSendingShareAmount(type, amount, balance, targetaddr, retu
   } else {
       commission =  (0.01) * amount * globaldriverplans.standardplan; // like 4%
   }
-   logger.log("partneraddress= "+ globalcontractinfo.partneraddress);
-   logger.log("global network="+  globalnetwork);
 
 
    var shares = {
@@ -96,10 +91,8 @@ function toDashOutputScript(addr, network)
 	return dashrambitcore.DashScript.buildPublicKeyHashOut(addr, network);
 }
 
-//bitcore.Script.buildPublicKeyHashOut
 
-function determineDashRedeemingShareAmount(type, balance, 
-		targetaddr, selectedplan)
+function determineDashRedeemingShareAmount(type, balance, targetaddr, selectedplan)
 {
 
   var fees = Number(globaldriverplans.dashcoinfees);
@@ -116,12 +109,6 @@ function determineDashRedeemingShareAmount(type, balance,
 
   var targetaddr1 =targetaddr;
   var targetaddr2 =targetaddr;
-  logger.log("targetaddrx="+targetaddr);
-  logger.log("targetaddr="+JSON.stringify(targetaddr.toString()));
-  logger.log("balance="+balance);
-  logger.log("commission="+commission);
-  logger.log("fees="+fees);
-  logger.log("globalcontrctinfo="+JSON.stringify(globalcontractinfo));
 
    var shares = {
 	partner: {
@@ -147,20 +134,18 @@ function determineDashRedeemingShareAmount(type, balance,
   return shares;
 }
 
-//var url = 'https://api.blockcypher.com/v1/bcy/test/addrs/';
+// var url = 'https://api.blockcypher.com/v1/bcy/test/addrs/';
 // var url = 'https://testnet-insight.dashevo.org/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
 
 function getDashBalance (param)
 {
-var url = globalurl + '/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
-var promise = new Promise(function (resolve, reject) {
+  var url = globalurl + '/insight-api/addr/'; 
+  var promise = new Promise(function (resolve, reject) {
 
     request.get(url + param  , function (error, response, body) {
         if (error) {
            reject(error);
         }
-
-
         logger.log('Body:', body)
         if (typeof body === 'string') {
             try {
@@ -174,11 +159,7 @@ var promise = new Promise(function (resolve, reject) {
          globalbalance = 0;
          globalbalance = body.balanceSat;
          globalspendabletxs = [];
-//         globalspendabletxs = processtx(txs, param);
-
-
-    resolve(globalbalance);
-
+        resolve(globalbalance);
         }
         else {
 	var error = {
@@ -186,7 +167,6 @@ var promise = new Promise(function (resolve, reject) {
          };
 	reject(error);
         }
-	// return callback(null, body)
     });
   });
 
@@ -196,8 +176,7 @@ var promise = new Promise(function (resolve, reject) {
 
 function dotransactioncheck (param, tx)
 {
-
-var promise = new Promise(function (resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
 
     request.get(url + param , function (error, response, body) {
         if (error) {
@@ -209,10 +188,7 @@ var promise = new Promise(function (resolve, reject) {
 	 var txs = body.txs;
          var status = checkiftransactionexists(txs, tx);
 
-
-
     resolve(status);
-	// return callback(null, body)
     });
   });
 
@@ -232,10 +208,8 @@ function checkiftransactionexists(globaltxs, tx)
 
 function processtx(address)
 {
-
-
-var url = globalurl + '/insight-api/addr/'+address+'/utxo';
-var promise = new Promise(function (resolve, reject) {
+  var url = globalurl + '/insight-api/addr/'+address+'/utxo';
+  var promise = new Promise(function (resolve, reject) {
 
     request.get(url   , function (error, response, body) {
         if (error) {
@@ -251,31 +225,25 @@ var promise = new Promise(function (resolve, reject) {
         logger.log('Body:', body)
 	var n = body.map(function(x) {
     var p = {
-"txId" : x.txid,
-  "outputIndex" : x.vout,
-  "address" : x.address,
-  "script" : x.scriptPubKey,
-  "satoshis" : x.satoshis
+  	"txId" : x.txid,
+  	"outputIndex" : x.vout,
+  	"address" : x.address,
+  	"script" : x.scriptPubKey,
+  	"satoshis" : x.satoshis
 	 };
-    return p; 
+        return p; 
         });
-
-
 	resolve(n);
         }
   });
-});
-
-return promise;
+ });
+ return promise;
 
 }
 
 
 function regularDashcoinSendingFund(type, amount, targetaddr, activatingkeypair, choosenplan)
 {
- 	// buildatransaction, broadcast.
-
-
 var activatepromise = new Promise(function (resolve, reject) {
     var spendingaddr = activatingkeypair.toAddress(globalnetwork).toString() ;
     var returnaddr = spendingaddr;
@@ -284,15 +252,12 @@ var activatepromise = new Promise(function (resolve, reject) {
 
     balpromise.then(function(notused) {
 
-    // var txb = new bitcoin.TransactionBuilder (globalnetwork);
-
     var hashType = 1 ;
     if(globalbalance == 0)
     {
 	logger.log("globalbalance="+globalbalance);
         var error = "Balance is zero";
         reject(error);
-
     }    
 
     logger.log("globalbalance="+globalbalance);
@@ -302,9 +267,8 @@ var activatepromise = new Promise(function (resolve, reject) {
     txpromise.then(function(txreceived) {
     var spendoutlist = txreceived;
     var inputs=txreceived;
-    logger.log("before oupputs="+JSON.stringify(activationshares));
 
- var outputs = [
+   var outputs = [
      { 
     satoshis: activationshares.partner.amount,
     address: activationshares.partner.address
@@ -353,8 +317,6 @@ var activatepromise = new Promise(function (resolve, reject) {
 
 }
 
-
-
 // https://github.com/dashevo/bitcore-dash
 
 
@@ -366,12 +328,12 @@ function getDashcoinCompositeAddress(senderstub, uidkey, usagetype  )
   var Pin = JSON.stringify(senderstub);
 //  var Pinkey = Buffer.from(Pin);
 
-   var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin, 
+   var blockchainaddress = dashcompositekeylib.getBufControlCodeAddress(Pin, 
 		uidkey,
 		globalnetwork);
-   logger.log("docaddr = "+docaddr);
+   logger.log("blockchainaddress = "+blockchainaddress);
 
-   return docaddr;
+   return blockchainaddress;
 }
 
 
@@ -386,14 +348,14 @@ function compReceiveFund(senderstub, uidkey, targetaddr )
     var Pin = JSON.stringify(senderstub);
    var Pinkey = Buffer.from(Pin);
  
-    var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pinkey,
+    var blockchainaddress = dashcompositekeylib.getBufControlCodeAddress(Pinkey,
                  uidkey,
                  globalnetwork);
 
  var type = 1;
 
 var activatepromise = new Promise(function (resolve, reject) {
-     var promise = getDashBalance(docaddr );
+     var promise = getDashBalance(blockchainaddress );
  
      promise.then(function(notused) {
  
@@ -431,24 +393,20 @@ function compDashcoinReceive1toManyFund(senderstub, uidkey, targetaddr, selected
 {
    
   assert(dashrambitcore.util.js.isHexaString(uidkey));
-    var Pin = JSON.stringify(senderstub);
+  var Pin = JSON.stringify(senderstub);
  
-    var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
+  var blockchainaddress = dashcompositekeylib.getBufControlCodeAddress(Pin,
                  uidkey,
                  globalnetwork);
-   logger.log("docaddr 2 = "+docaddr);
+  logger.log("blockchainaddress  = "+blockchainaddress);
 
+  var activatepromise = new Promise(function (resolve, reject) {
 
+  var type = 1;
 
-
-var activatepromise = new Promise(function (resolve, reject) {
-
- var type = 1;
-     var balpromise = getDashBalance(docaddr );
+  var balpromise = getDashBalance(blockchainaddress );
 
     balpromise.then(function(notused) {
-
-
     var hashType = 1 ;
     if(globalbalance == 0)
     {
@@ -458,8 +416,7 @@ var activatepromise = new Promise(function (resolve, reject) {
 
     }
 
-
-    var txpromise = processtx(docaddr );
+    var txpromise = processtx(blockchainaddress );
 
     txpromise.then(function(txreceived) {
     var spendoutlist = txreceived;
@@ -468,21 +425,19 @@ var activatepromise = new Promise(function (resolve, reject) {
     if(inputs.length == 0)
     {
         reject('no inputs to spend');
-
     }
+
    logger.log("targetaddr = "+ targetaddr);
    var paytowhom = determineDashRedeemingShareAmount(type, globalbalance, targetaddr, selectedplan);
 
    var tx = dashcompositekeylib.get1toManyTransactionForBufCode(Pin, uidkey, spendoutlist, paytowhom, globalnetwork); 
   
+   var txobject = tx.toBuffer();
 
-
-     var txobject = tx.toBuffer();
-
-    logger.log("compDashcoinReceive1toManyFund : transaction ready");
+   logger.log("compDashcoinReceive1toManyFund : transaction ready");
     var mydata = {
       txobject: txobject,
-      fromaddress: docaddr.toString(),
+      fromaddress: blockchainaddress.toString(),
       balance: globalbalance
     };
      resolve(mydata);
@@ -500,32 +455,13 @@ var activatepromise = new Promise(function (resolve, reject) {
         reject(error);
   });
 
-});
+ });
 });
 
   return activatepromise;
 }
 
 
-function doc2Uploadv(senderstub, uidkey, usagetype )
-{
-// type 1, hashofdoc is used in raw string
-
-  assert(dashrambitcore.util.js.isHexaString(uidkey));
-  var Pin = JSON.stringify(senderstub);
-  var Pinkey = Buffer.from(Pin);
-
-  var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pinkey, uidkey,
-		bitcoin.networks.testnet);
-   logger.log("address2 = "+addr2);
-
-
-   return docaddr;
-}
-
-function doc2Validate(addr, usagetype,receiverstub, tx, uidkey )
-{
-}
 
 
 function sendtx(tx)
@@ -534,12 +470,13 @@ function sendtx(tx)
     rawtx: tx
    };
 
-var config = {
- params: pushtx
-};
+   var config = {
+    params: pushtx
+   };
 
 //   var lurl = 'https://api.blockcypher.com/v1/bcy/test/txs/push';
-// var lurl = 'https://testnet-insight.dashevo.org/insight-api/tx/send';
+//   var lurl = 'https://testnet-insight.dashevo.org/insight-api/tx/send';
+
 var lurl = globalurl + '/insight-api/tx/send';
    var promise = new Promise(function (resolve, reject) {
    logger.log("before push=", JSON.stringify(pushtx));
@@ -564,11 +501,6 @@ module.exports = {
    dashcoinInit: dashcoinInit,
    regularDashcoinSendingFund: regularDashcoinSendingFund,
    getDashcoinCompositeAddress: getDashcoinCompositeAddress,
-//   doc1Checktx: doc1Checktx,
-//   doc1CheckAddr: doc1CheckAddr,
-//   compReceiveFund: compReceiveFund,
    compDashcoinReceive1toManyFund: compDashcoinReceive1toManyFund,
-//   doc2Uploadv: doc2Uploadv,
    sendtx: sendtx
-//   doc2Validate: doc2Validate
 }

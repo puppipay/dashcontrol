@@ -8,17 +8,15 @@ promise = require('promise');
 var assert = require('assert');
 var _ = require('lodash');
 
-
-
 typeforce = require('typeforce');
 var bufferReverse = require('buffer-reverse')
 
 
-   logger.init(true);
+logger.init(true);
 
 function dashcoinInit(contractinfo,  network, url, driverplans, plans, level) 
 {
-  var valid = true;
+   var valid = true;
    logger.init(level);
 
 
@@ -49,9 +47,6 @@ function determineDashSendingShareAmount(type, amount, balance, targetaddr, retu
   } else {
       commission =  (0.01) * amount * gdata.globaldriverplans.standardplan; // like 4%
   }
-   logger.log("partneraddress= "+ gdata.globalcontractinfo.partneraddress);
-   logger.log("global network="+  gdata.globalnetwork);
-
 
    var shares = {
 	partner: {
@@ -106,8 +101,6 @@ function sending2partySplit(amountsent, balanceinaddress, workdata, networkfees)
 
   var  partnercommission =  (0.01) * amount * Number(workdata.partnerfeespercentage) + Number(workdata.vendorfeesfixed) ; 
 
-
-
    var shares = {
 	partner: {
 	outscriptPubKey: toDashOutputScript(workdata.partneraddress, workdata.network),
@@ -157,9 +150,8 @@ function toDashOutputScript(addr, network)
 
 function determineDashRedeemingShareAmount(type, balance, targetaddr, selectedplan, gdata)
 {
-   
 
-   logger.log("determineDashRedeemingShareAmount entered "+ JSON.stringify(gdata));
+  logger.log("determineDashRedeemingShareAmount entered "+ JSON.stringify(gdata));
   try {
   var fees = Number(gdata.globaldriverplans.dashcoinfees);
   var balance = Number(balance);
@@ -175,12 +167,6 @@ function determineDashRedeemingShareAmount(type, balance, targetaddr, selectedpl
 
   var targetaddr1 =targetaddr;
   var targetaddr2 =targetaddr;
-  logger.log("targetaddrx="+targetaddr);
-  logger.log("targetaddr="+JSON.stringify(targetaddr.toString()));
-  logger.log("balance="+balance);
-  logger.log("commission="+commission);
-  logger.log("fees="+fees);
-  logger.log("globalcontrctinfo="+JSON.stringify(gdata.globalcontractinfo));
 
    var shares = {
 	partner: {
@@ -278,19 +264,19 @@ function receiving2PartySplit(balancesent, workdata , networkfees)
   }
 }
 
-//var url = 'https://api.blockcypher.com/v1/bcy/test/addrs/';
+// var url = 'https://api.blockcypher.com/v1/bcy/test/addrs/';
 // var url = 'https://testnet-insight.dashevo.org/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
 
 function getDashBalance (param, network)
 {
  console.log("Checking Dash balance");
-var url ;
+ var url ;
  if(network == "testnet") {
-url = 'https://testnet-insight.dashevo.org/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
+    url = 'https://testnet-insight.dashevo.org/insight-api/addr/'; 
  } else {
-url = 'https://insight.dashevo.org/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
-
+    url = 'https://insight.dashevo.org/insight-api/addr/'; 
  }
+
 // var url = globalurl + '/insight-api/addr/'; //yWGQRPF8ZYzM2YmX6ZAdHjwWgonEEyKppo
 var promise = new Promise(function (resolve, reject) {
 
@@ -305,8 +291,7 @@ var promise = new Promise(function (resolve, reject) {
            reject(myerror);
         }
 
-           console.log("Body: "+body);
-//           console.log("response: "+JSON.stringify(response));
+        console.log("Body: "+body);
 
         logger.log('Body:'+ body)
             try {
@@ -334,10 +319,9 @@ var promise = new Promise(function (resolve, reject) {
          globalbalance = 0;
          globalbalance = body.balanceSat;
          globalspendabletxs = [];
-//         globalspendabletxs = processtx(txs, param);
 
 
-    resolve(globalbalance);
+         resolve(globalbalance);
          } else {
              var myerror = {
                error: "undefined body",
@@ -345,32 +329,27 @@ var promise = new Promise(function (resolve, reject) {
              };
 	reject(myerror);
          }
-
         });
-	// return callback(null, body)
   });
-
   return promise;
 }
 
 
 function processtx(address, network)
 {
-
  console.log("Doing processtx "+ address);
-var globalurl1 ;
-var url1 ;
+ var globalurl1 ;
+ var url1 ;
  if(network == 'testnet') {
-globalurl1 = "https://testnet-insight.dashevo.org"; 
-url1 = globalurl1 + "/insight-api/addr/"+address+"/utxo";
+    globalurl1 = "https://testnet-insight.dashevo.org"; 
+    url1 = globalurl1 + "/insight-api/addr/"+address+"/utxo";
  } else {
-globalurl1 = "https://insight.dashevo.org"; 
-url1 = globalurl1 + "/insight-api/addr/"+address+"/utxo";
-
+    globalurl1 = "https://insight.dashevo.org"; 
+    url1 = globalurl1 + "/insight-api/addr/"+address+"/utxo";
  }
 
-   logger.log('Processtx calling url:'+ url1)
-var promise = new Promise(function (resolve, reject) {
+ logger.log('Processtx calling url:'+ url1)
+ var promise = new Promise(function (resolve, reject) {
     
    logger.log('Processtx calling url:'+ url1)
     request.get(url1   , function (error, response, body1) {
@@ -409,16 +388,14 @@ var promise = new Promise(function (resolve, reject) {
 	var n = body.map(function(x) {
         logger.log('x');
     var p = {
-"txId" : x.txid,
-  "outputIndex" : x.vout,
-  "address" : x.address,
-  "script" : x.scriptPubKey,
-  "satoshis" : x.satoshis
+	"txId" : x.txid,
+  	"outputIndex" : x.vout,
+  	"address" : x.address,
+  	"script" : x.scriptPubKey,
+  	"satoshis" : x.satoshis
 	 };
-    return p; 
+    	return p; 
         });
-
-
         logger.log('resolve n');
 	resolve(n);
   });
@@ -431,10 +408,8 @@ return promise;
 
 function regularDashcoinSendingFund(type, amount, targetaddr, activatingkeypair, choosenplan, gdata)
 {
- 	// buildatransaction, broadcast.
 
-
-var activatepromise = new Promise(function (resolve, reject) {
+  var activatepromise = new Promise(function (resolve, reject) {
     var spendingaddr = activatingkeypair.toAddress(gdata.globalnetwork).toString() ;
     var returnaddr = spendingaddr;
     logger.log("spendingaddr="+spendingaddr);
@@ -442,7 +417,6 @@ var activatepromise = new Promise(function (resolve, reject) {
 
     balpromise.then(function(globalbalance) {
 
-    // var txb = new bitcoin.TransactionBuilder (globalnetwork);
 
     var hashType = 1 ;
     if(globalbalance == 0)
@@ -483,7 +457,7 @@ var activatepromise = new Promise(function (resolve, reject) {
     var inputs=txreceived;
     logger.log("before oupputs="+JSON.stringify(activationshares));
 
- var   outputs = [
+   var outputs = [
      { 
     satoshis: activationshares.partner.amount,
     address: activationshares.partner.address
@@ -541,9 +515,7 @@ var activatepromise = new Promise(function (resolve, reject) {
 
 function regular2PartySplitSend(amount, targetaddr, activatingkeypair, workdata, network)
 {
-
-
-var activatepromise = new Promise(function (resolve, reject) {
+    var activatepromise = new Promise(function (resolve, reject) {
     var spendingaddr = activatingkeypair.toAddress(network).toString() ;
     var returnaddr = spendingaddr;
 
@@ -600,7 +572,7 @@ var activatepromise = new Promise(function (resolve, reject) {
     var inputs=txreceived;
     logger.log("regular2PartySplitSend: before outputs="+JSON.stringify(activationshares));
 
- var   outputs = [
+   var outputs = [
      { 
     satoshis: activationshares.partner.amount,
     address: activationshares.partner.address
@@ -670,12 +642,12 @@ function getDashKeyPinAddress(kycid, network) {
   var pubkey =  new dashrambitcore.PublicKey(keyPair); // keyPair.getPublicKeyBuffer();
   var uidkey =  pubkey.toBuffer()// keyPair.getPublicKeyBuffer();
 
-  var docaddr = getDashcoinCompositeAddress(pindata,
+  var blockchainaddr = getDashcoinCompositeAddress(pindata,
                 uidkey.toString('hex'),
                 network);
 
   var set = {
-      address: docaddr.toString(),
+      address: blockchainaddr.toString(),
       uid: uidkey.toString('hex'),
       pindata: pindata
    };
@@ -697,12 +669,12 @@ function getCustomUidDashKeyPinAddress(kycid,uidkey, network) {
   };
 
 
-  var docaddr = getDashcoinCompositeAddress(pindata,
+  var blockchainaddr = getDashcoinCompositeAddress(pindata,
                 uidkey,
                 network);
 
   var set = {
-      address: docaddr.toString(),
+      address: blockchainaddr.toString(),
       uid: uidkey,
       pindata: pindata
    };
@@ -734,12 +706,12 @@ function getDashKeyJsonPinAddress(kycid,jsonpin, network) {
   var pubkey =  new dashrambitcore.PublicKey(keyPair); // keyPair.getPublicKeyBuffer();
   var uidkey =  pubkey.toBuffer()// keyPair.getPublicKeyBuffer();
 
-  var docaddr = getDashcoinCompositeAddress(pindata,
+  var blockchainaddr = getDashcoinCompositeAddress(pindata,
                 uidkey.toString('hex'),
                 network);
 
   var set = {
-      address: docaddr.toString(),
+      address: blockchainaddr.toString(),
       uid: uidkey.toString('hex'),
       pindata: pindata
    };
@@ -758,16 +730,16 @@ function getCustomPinDashAddress(kycid,sentpin, network) {
   };
 
 
-   var keyPair = new dashrambitcore.PrivateKey() ; // dash.dashcoin.ECPair.makeRandom();
+  var keyPair = new dashrambitcore.PrivateKey() ; // dash.dashcoin.ECPair.makeRandom();
   var pubkey =  new dashrambitcore.PublicKey(keyPair); // keyPair.getPublicKeyBuffer();
   var uidkey =  pubkey.toBuffer()// keyPair.getPublicKeyBuffer();
 
-  var docaddr = getDashcoinCompositeAddress(pindata,
+  var blockchainaddr = getDashcoinCompositeAddress(pindata,
                 uidkey.toString('hex'),
                 network);
 
   var set = {
-      address: docaddr.toString(),
+      address: blockchainaddr.toString(),
       uid: uidkey.toString('hex'),
       pindata: pindata
    };
@@ -778,34 +750,33 @@ function getCustomPinDashAddress(kycid,sentpin, network) {
 
 function getDashcoinCompositeAddress(senderstub, uidkey, network  )
 {
-// type 1, hashofdoc is used in raw string
-// type 2, hash of hashofdoc is used in  string
-   assert(dashrambitcore.util.js.isHexaString(uidkey));
+  // type 1, hashofdoc is used in raw string
+  // type 2, hash of hashofdoc is used in  string
+  assert(dashrambitcore.util.js.isHexaString(uidkey));
 
   var Pin = JSON.stringify(senderstub);
-//  var Pinkey = Buffer.from(Pin);
 
-   var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin, 
+  var blockchainaddr = dashcompositekeylib.getBufControlCodeAddress(Pin, 
 		uidkey,
 		network);
-   logger.log("docaddr = "+docaddr);
+   logger.log("blockchainaddr = "+blockchainaddr);
 
-   return docaddr;
+   return blockchainaddr;
 
 }
 
 function getSplit2PartyAddress(senderstub, uidkey, network  )
 {
-   assert(dashrambitcore.util.js.isHexaString(uidkey));
+  assert(dashrambitcore.util.js.isHexaString(uidkey));
 
   var Pin = JSON.stringify(senderstub);
 
-   var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
+  var blockchainaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
                 uidkey,
                 network);
-   logger.log("docaddr = "+docaddr);
+  logger.log("blockchainaddr = "+blockchainaddr);
 
-   return docaddr;
+  return blockchainaddr;
 
 }
 
@@ -813,25 +784,24 @@ function getSplit2PartyAddress(senderstub, uidkey, network  )
 function compDashcoinReceive1toManyFund(senderstub, uidkey, targetaddr, selectedplan , gdata)
 {
    
-     assert(dashrambitcore.util.js.isHexaString(uidkey));
+    assert(dashrambitcore.util.js.isHexaString(uidkey));
 
     var Pin = JSON.stringify(senderstub);
  
-    var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
+    var blockchainaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
                  uidkey,
                  gdata.globalnetwork);
-   logger.log("docaddr 2 = "+docaddr);
+   logger.log("blockchainaddr 2 = "+blockchainaddr);
 
 
 
 
-var activatepromise = new Promise(function (resolve, reject) {
+  var activatepromise = new Promise(function (resolve, reject) {
 
- var type = 1;
-     var balpromise = getDashBalance(docaddr, network );
+  var type = 1;
+     var balpromise = getDashBalance(blockchainaddr, network );
 
     balpromise.then(function(globalbalance) {
-
 
     var hashType = 1 ;
     if(globalbalance == 0)
@@ -847,7 +817,7 @@ var activatepromise = new Promise(function (resolve, reject) {
     }
 
 
-    var txpromise = processtx(docaddr, gdata.globalnetwork );
+    var txpromise = processtx(blockchainaddr, gdata.globalnetwork );
 
     txpromise.then(function(txreceived) {
     var spendoutlist = txreceived;
@@ -883,15 +853,13 @@ var activatepromise = new Promise(function (resolve, reject) {
 
    logger.log("calling get1toManyTransactionForBufCode  ");
    var tx = dashcompositekeylib.get1toManyTransactionForBufCode(Pin, uidkey, spendoutlist, paytowhom, gdata.globalnetwork); 
-  
 
+   var txobject = tx.toBuffer();
 
-     var txobject = tx.toBuffer();
-
-    logger.log("compDashcoinReceive1toManyFund : transaction ready");
+   logger.log("compDashcoinReceive1toManyFund : transaction ready");
     var mydata = {
       txobject: txobject,
-      fromaddress: docaddr.toString(),
+      fromaddress: blockchainaddr.toString(),
       balance: globalbalance
     };
      resolve(mydata);
@@ -902,10 +870,9 @@ var activatepromise = new Promise(function (resolve, reject) {
                context: "compDashcoinReceive1toManyFund: Issue getting txs",
              };
 
-        reject(myerror);
+       reject(myerror);
 
     }).catch (function(error){
-
         logger.log("compDashcoinReceive1toManyFund : issue getting balance ");
          var myerror = {
                error: "error",
@@ -922,7 +889,7 @@ var activatepromise = new Promise(function (resolve, reject) {
 
 function split2PartyReceive1toMany(senderstub, uidkey, targetaddr,  workdata,  networkfees)
 {
-     assert(dashrambitcore.util.js.isHexaString(uidkey));
+   assert(dashrambitcore.util.js.isHexaString(uidkey));
 
    logger.log("split2PartyReceive1toMany networkfees  = "+networkfees);
 
@@ -930,18 +897,15 @@ function split2PartyReceive1toMany(senderstub, uidkey, targetaddr,  workdata,  n
 
     var Pin = JSON.stringify(senderstub);
  
-    var docaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
+    var blockchainaddr = dashcompositekeylib.getBufControlCodeAddress(Pin,
                  uidkey,
                  network);
-   logger.log("split2PartyReceive1toMany Addr  = "+docaddr);
+   logger.log("split2PartyReceive1toMany Addr  = "+blockchainaddr);
 
+    var activatepromise = new Promise(function (resolve, reject) {
 
-
-
-var activatepromise = new Promise(function (resolve, reject) {
-
- var type = 1;
-     var balpromise = getDashBalance(docaddr ,network );
+    var type = 1;
+    var balpromise = getDashBalance(blockchainaddr ,network );
 
     balpromise.then(function(globalbalance) {
 
@@ -960,7 +924,7 @@ var activatepromise = new Promise(function (resolve, reject) {
     }
 
 
-    var txpromise = processtx(docaddr, network );
+    var txpromise = processtx(blockchainaddr, network );
 
     txpromise.then(function(txreceived) {
     var spendoutlist = txreceived;
@@ -1004,18 +968,15 @@ var activatepromise = new Promise(function (resolve, reject) {
     }
 
 
-
    logger.log("split2PartyReceive1toMany: calling get1toManyTransactionForBufCode  ");
    var tx = dashcompositekeylib.get1toManyTransactionForBufCode(Pin, uidkey, spendoutlist, paytowhom, network); 
-  
 
-
-     var txobject = tx.toBuffer();
+    var txobject = tx.toBuffer();
 
     logger.log("split2PartyReceive1toMany : transaction ready");
     var mydata = {
       txobject: txobject,
-      fromaddress: docaddr.toString(),
+      fromaddress: blockchainaddr.toString(),
         shares:  paytowhom,
       balance: globalbalance
     };
@@ -1102,13 +1063,8 @@ module.exports = {
    getCustomPinDashAddress: getCustomPinDashAddress,
    getDashKeyJsonPinAddress: getDashKeyJsonPinAddress,
    getCustomUidDashKeyPinAddress: getCustomUidDashKeyPinAddress,
-//   doc1Checktx: doc1Checktx,
-//   doc1CheckAddr: doc1CheckAddr,
-//   compReceiveFund: compReceiveFund,
    compDashcoinReceive1toManyFund: compDashcoinReceive1toManyFund,
    receiving2PartySplit: receiving2PartySplit,
    split2PartyReceive1toMany: split2PartyReceive1toMany,
-//   doc2Uploadv: doc2Uploadv,
    sendtx: sendtx
-//   doc2Validate: doc2Validate
 }

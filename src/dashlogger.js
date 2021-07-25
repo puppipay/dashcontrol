@@ -1,7 +1,4 @@
-//types = require('./node_modules/bitcoinjs-lib/src/types');
-
 var globaldashlog = false;
-
 function init(level) 
 {
   globaldashlog = level;
